@@ -2,7 +2,7 @@
 
 // Interval between internal temperature reads
 unsigned long next_temp_read = 0;   // Next time step in milliseconds 
-uint8_t temp_read_interval = 1000;  // This is in milliseconds
+uint32_t temp_read_interval = 1000;  // This is in milliseconds
 
 // Initialise the TinyPICO library
 TinyPICO tp = TinyPICO();
