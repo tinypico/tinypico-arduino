@@ -227,6 +227,7 @@ void TinyPICO::Tone( uint8_t pin, uint32_t freq )
 {
     if ( !isToneInit )
     {
+        pinMode( pin, OUTPUT);
         ledcSetup(0, freq, 8); // Channel 0, resolution 8
         ledcAttachPin( pin , 0 );
         isToneInit = true;
@@ -235,11 +236,12 @@ void TinyPICO::Tone( uint8_t pin, uint32_t freq )
     ledcWriteTone( 0, freq );
 }
 
-void TinyPICO::NoTone()
+void TinyPICO::NoTone( uint8_t pin )
 {
     if ( isToneInit )
     {
         ledcWriteTone(0, 0);
+        pinMode( pin, INPUT_PULLDOWN);
         isToneInit = false;
     }
 }

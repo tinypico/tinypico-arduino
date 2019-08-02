@@ -71,7 +71,7 @@
 
             // Tone for making sound on any ESP32 - just using channel 0
             void Tone( uint8_t, uint32_t );
-            void NoTone();
+            void NoTone( uint8_t );
 
 			
 		protected:
