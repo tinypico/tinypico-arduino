@@ -221,3 +221,25 @@ float TinyPICO::Get_Internal_Temp_C()
     float temp_farenheit = temprature_sens_read();
     return( ( temp_farenheit - 32 ) / 1.8 );
 }
+
+// Tone - Suond wrapper
+void TinyPICO::Tone( uint8_t pin, uint32_t freq )
+{
+    if ( !isToneInit )
+    {
+        ledcSetup(0, freq, 8); // Channel 0, resolution 8
+        ledcAttachPin( pin , 0 );
+        isToneInit = true;
+    }
+
+    ledcWriteTone( 0, freq );
+}
+
+void TinyPICO::NoTone()
+{
+    if ( isToneInit )
+    {
+        ledcWriteTone(0, 0);
+        isToneInit = false;
+    }
+}

@@ -69,6 +69,10 @@
 			uint8_t Get_Internal_Temp_F();
 			float Get_Internal_Temp_C();
 
+            // Tone for making sound on any ESP32 - just using channel 0
+            void Tone( uint8_t, uint32_t );
+            void NoTone();
+
 			
 		protected:
 			void swspi_init(void);                      // Start bitbang SPI
@@ -83,6 +87,7 @@
 			uint8_t brightness;                             // Global brightness setting  
 			uint8_t pixel[ 3 ];                                 // LED RGB values (3 bytes ea.)  
 			bool isInit;
+            bool isToneInit;
 	};
 
 
