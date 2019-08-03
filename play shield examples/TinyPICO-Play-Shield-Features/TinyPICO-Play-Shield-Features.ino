@@ -31,7 +31,6 @@ OneButton button3(15, false);
 OneButton button4(14, false);
 
 int buttonStates[] = { 0, 0, 0, 0 };
-int ledState = false;
 
 unsigned long nextButtonHelp = 0;
 uint8_t buttonHelpState = 0;
@@ -312,8 +311,7 @@ void Click3()
 {
   buttonStates[2] = 10;
   BootSound();
-  ledState = !ledState;
-  digitalWrite( LED, ledState );
+  digitalWrite( LED, !digitalRead( LED ) );
 }
 
 void Click4()
