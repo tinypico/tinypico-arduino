@@ -3,6 +3,10 @@ Arduino TinyPICO Play Shield
 
 TinyPICO Arduino Play Shield Features Example
 
+This example sketch covers the implementation andf use of teh following features:
+
+OLED, IMU, Light sensor, buttons, WiFi and sound.
+
 Requirements
 ------------
 The exampkles in this folder require the TinyPICO Arduino Helper Library
