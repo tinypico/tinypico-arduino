@@ -136,6 +136,21 @@ void BootSound()
 
   tp.NoTone( AUDIO );
 }
+void ButtonSound()
+{
+  int freq;
+  for (freq = 255; freq < 2000; freq = freq + 500)
+  {
+    tp.Tone( AUDIO, freq );
+    delay(50);
+  }
+  for (; freq > 250; freq = freq - 250)
+  {
+    tp.Tone( AUDIO, freq );
+    delay(50);
+  }
+  tp.NoTone( AUDIO );
+}
 
 void loop() {
   // put your main code here, to run repeatedly:
@@ -310,8 +325,9 @@ void Click2()
 void Click3()
 {
   buttonStates[2] = 10;
-  BootSound();
-  digitalWrite( LED, !digitalRead( LED ) );
+  digitalWrite( LED, !old_LED_state );
+  ButtonSound();
+  digitalWrite( LED, old_LED_state );
 }
 
 void Click4()
