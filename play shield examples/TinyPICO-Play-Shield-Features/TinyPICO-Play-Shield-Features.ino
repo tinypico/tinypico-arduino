@@ -51,7 +51,7 @@ bool wasWifi = false;
 
 // Wifi Stuff
 const char* ntpServer = "pool.ntp.org";
-const long  gmtOffset_sec = 36000;
+const long  gmtOffset_sec = -28800;
 const int   daylightOffset_sec = 3600;
 
 // Loop states
@@ -77,20 +77,20 @@ void setup()
   // Alternate I2C Address is 0x3D
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
-  { 
+  {
     Serial.println("SSD1306 allocation failed - Execution halted!");
     // Don't proceed, loop forever
-    while (1); 
+    while (1);
   }
   Serial.println("SSD1306 OLED initialised");
 
   // Initialise the LIS3DH as addreess 0x18
   // Alternate I2C Address is 0x19
   if (! lis.begin(0x18))
-  {   
+  {
     Serial.println("No LIS3DH IMU Found or failed to start - Execution halted!");
     // Don't proceed, loop forever
-    while (1); 
+    while (1);
   }
   Serial.println("LIS3DH found and initialised!");
 
@@ -128,12 +128,27 @@ void setup()
 
 void BootSound()
 {
-   for (int freq = 255; freq < 2000; freq = freq + 250)
-   {
-     tp.Tone( AUDIO, freq );
-     delay(50);
+  for (int freq = 255; freq < 2000; freq = freq + 250)
+  {
+    tp.Tone( AUDIO, freq );
+    delay(50);
   }
 
+  tp.NoTone( AUDIO );
+}
+void ButtonSound()
+{
+  int freq;
+  for (freq = 255; freq < 2000; freq = freq + 500)
+  {
+    tp.Tone( AUDIO, freq );
+    delay(50);
+  }
+  for (; freq > 250; freq = freq - 250)
+  {
+    tp.Tone( AUDIO, freq );
+    delay(50);
+  }
   tp.NoTone( AUDIO );
 }
 
@@ -154,7 +169,7 @@ void loop() {
       currentState = 0;
       return;
     }
-    
+
     if ( WiFi.status() == WL_CONNECTED )
     {
       WiFi.disconnect(true);
@@ -228,7 +243,7 @@ void loop() {
           display.println( "[2] Toggle IMU");
           break;
         case 2:
-          display.println( "[3] ...");
+          display.println( "[3] Toggle LED+Sound");
           break;
         case 3:
           display.println( "[4] Toggle WiFi");
@@ -236,7 +251,7 @@ void loop() {
         case 99:
           display.println( "ERR: SSID Not Set!");
           break;
-        
+
       }
     }
 
@@ -310,6 +325,9 @@ void Click2()
 void Click3()
 {
   buttonStates[2] = 10;
+  digitalWrite( LED, !old_LED_state );
+  ButtonSound();
+  digitalWrite( LED, old_LED_state );
 }
 
 void Click4()
