@@ -204,7 +204,7 @@ float TinyPICO::GetBatteryVoltage()
 
 		// grab latest voltage
         lastMeasuredVoltage = analogRead(BAT_VOLTAGE);
-  		lastMeasuredVoltage /= 1075; // adjust because of 0-1.2V attentuation
+  		lastMeasuredVoltage /= 1075; // adjust because of 0-1.2V attenuation
   		lastMeasuredVoltage *= 4.2;  // Multiply by 4.2V, our reference voltage
 	}
 
@@ -222,7 +222,7 @@ float TinyPICO::Get_Internal_Temp_C()
     return( ( temp_farenheit - 32 ) / 1.8 );
 }
 
-// Tone - Suond wrapper
+// Tone - Sound wrapper
 void TinyPICO::Tone( uint8_t pin, uint32_t freq )
 {
     if ( !isToneInit )

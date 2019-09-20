@@ -55,8 +55,8 @@ const long  gmtOffset_sec = 36000;
 const int   daylightOffset_sec = 3600;
 
 // Loop states
-// 0 - default state - either shows buttn help or day/time if WiFi connected
-// 1 - connect ro disconnect from WiFi depending on current status
+// 0 - default state - either shows button help or day/time if WiFi connected
+// 1 - connect or disconnect from WiFi depending on current status
 // 2 - connecting to WiFi status screen
 int currentState = 0;
 
@@ -77,20 +77,20 @@ void setup()
   // Alternate I2C Address is 0x3D
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
-  { 
+  {
     Serial.println("SSD1306 allocation failed - Execution halted!");
     // Don't proceed, loop forever
-    while (1); 
+    while (1);
   }
   Serial.println("SSD1306 OLED initialised");
 
-  // Initialise the LIS3DH as addreess 0x18
+  // Initialise the LIS3DH as address 0x18
   // Alternate I2C Address is 0x19
   if (! lis.begin(0x18))
-  {   
+  {
     Serial.println("No LIS3DH IMU Found or failed to start - Execution halted!");
     // Don't proceed, loop forever
-    while (1); 
+    while (1);
   }
   Serial.println("LIS3DH found and initialised!");
 
@@ -101,7 +101,7 @@ void setup()
   Serial.print(2 << lis.getRange());
   Serial.println("G");
 
-  // Attatch the buttons to their callbacks
+  // Attach the buttons to their callbacks
   button1.attachClick(Click1);
   button2.attachClick(Click2);
   button3.attachClick(Click3);
@@ -122,7 +122,7 @@ void setup()
   display.clearDisplay();
   display.display();
 
-  // Set button help timer to 2 seconds from now to make sure we see teh first item
+  // Set button help timer to 2 seconds from now to make sure we see the first item
   nextButtonHelp = millis() + 2000;
 }
 
@@ -154,7 +154,7 @@ void loop() {
       currentState = 0;
       return;
     }
-    
+
     if ( WiFi.status() == WL_CONNECTED )
     {
       WiFi.disconnect(true);
@@ -222,7 +222,7 @@ void loop() {
       switch ( buttonHelpState )
       {
         case 0:
-          display.println( "[1] Toggle Light Sens");
+          display.println( "[1] Toggle Light Sensor");
           break;
         case 1:
           display.println( "[2] Toggle IMU");
@@ -236,7 +236,6 @@ void loop() {
         case 99:
           display.println( "ERR: SSID Not Set!");
           break;
-        
       }
     }
 
@@ -274,7 +273,7 @@ void loop() {
       }
     }
 
-    // Flash the button number for the last ste of buttons pressed
+    // Flash the button number for the last state of buttons pressed
     display.setTextSize(1);
     for ( int b = 0; b < 4; b++ )
     {

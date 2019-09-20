@@ -1,7 +1,7 @@
 #include <TinyPICO.h>
 
 // Interval between internal temperature reads
-unsigned long next_temp_read = 0;   // Next time step in milliseconds 
+unsigned long next_temp_read = 0;   // Next time step in milliseconds
 uint32_t temp_read_interval = 1000;  // This is in milliseconds
 
 // Initialise the TinyPICO library
@@ -15,7 +15,7 @@ void setup()
 
 void loop()
 {
-  // Cycle the DotStar colour every 25 miliseconds
+  // Cycle the DotStar colour every 25 milliseconds
   tp.DotStar_CycleColor(25);
 
   // You can set the DotStar colour directly using r,g,b values
@@ -24,7 +24,7 @@ void loop()
   // You can set the DotStar colour directly using a uint32_t value
   // tp.DotStar_SetPixelColor( 0xFFC900 );
 
-  // You can aclear the DotStar too
+  // You can clear the DotStar too
   // tp.DotStar_Clear();
 
   // To power down the DotStar for deep sleep you call this
@@ -41,10 +41,10 @@ void print_temp()
   {
     next_temp_read = millis();
 
-    // Grab the temperature in Farenheit
+    // Grab the temperature in Fahrenheit
     uint8_t temp_farenheit = tp.Get_Internal_Temp_F();
 
-    // Grab the temperature in Celcius
+    // Grab the temperature in Celsius
     float temp_celsius = tp.Get_Internal_Temp_C();
 
     // Print the temperatures to the output console
