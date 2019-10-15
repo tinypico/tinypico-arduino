@@ -7,6 +7,8 @@
 
 #include "TinyPICO.h"
 #include <SPI.h>
+#include "driver/adc.h"
+#include "esp_adc_cal.h"
 
 	#ifdef __cplusplus
 			extern "C" {
@@ -15,6 +17,12 @@
 	#ifdef __cplusplus
 			}
 	#endif
+
+// Battery divider resistor values
+#define UPPER_DIVIDER 442
+#define LOWER_DIVIDER 160
+#define DEFAULT_VREF  1100  // Default referance voltage in mv
+#define BATT_CHANNEL ADC1_CHANNEL_7  // Battery voltage ADC input
 
 TinyPICO::TinyPICO()
 {
@@ -197,18 +205,27 @@ bool TinyPICO::IsChargingBattery()
 // Return a *rough* estimate of the current battery voltage
 float TinyPICO::GetBatteryVoltage()
 {
-	// only check voltage every 1 second
-	if ( nextVoltage - millis() > 0 )
-	{
-		nextVoltage = millis() + 1000;
+    uint32_t raw, mv;
+    esp_adc_cal_characteristics_t chars;
 
-		// grab latest voltage
-        lastMeasuredVoltage = analogRead(BAT_VOLTAGE);
-  		lastMeasuredVoltage /= 1075; // adjust because of 0-1.2V attenuation
-  		lastMeasuredVoltage *= 4.2;  // Multiply by 4.2V, our reference voltage
-	}
+    // only check voltage every 1 second
+    if ( nextVoltage - millis() > 0 )
+    {
+        nextVoltage = millis() + 1000;
 
-	return ( lastMeasuredVoltage );
+        // grab latest voltage
+        analogRead(BAT_VOLTAGE);  // Just to get the ADC setup
+        raw = adc1_get_raw(BATT_CHANNEL);  // Read of raw ADC value
+
+        // Get ADC calibration values
+        esp_adc_cal_characterize(ADC_UNIT_1,ADC_ATTEN_11db ,ADC_WIDTH_BIT_12,DEFAULT_VREF,&chars);
+
+        // Convert to calibrated mv then volts
+        mv = esp_adc_cal_raw_to_voltage(raw, &chars) * (LOWER_DIVIDER+UPPER_DIVIDER) / LOWER_DIVIDER;
+        lastMeasuredVoltage = (float)mv / 1000.0;
+    }
+
+    return ( lastMeasuredVoltage );
 }
 
 uint8_t TinyPICO::Get_Internal_Temp_F()
