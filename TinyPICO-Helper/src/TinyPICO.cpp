@@ -1,8 +1,13 @@
 // ---------------------------------------------------------------------------
 // Created by Seon Rozenblum - seon@unexpectedmaker.com
-// Copyright 2016 License: GNU GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
+// Copyright 2019 License: MIT https://github.com/tinypico/tinypico-arduino/blob/master/LICENSE
 //
 // See "TinyPICO.h" for purpose, syntax, version history, links, and more.
+//
+// v1.3 - Code cleanup for SWSPI bit-banging and fixed single set color not working the first time
+// v1.2 - Fixed incorrect attenuation calc in the battery voltage method
+// v1.1 - Fixed folder structure to be compliant with the Arduino Library Manager requirements
+// v1.0 - Initial Release
 // ---------------------------------------------------------------------------
 
 #include "TinyPICO.h"
@@ -71,30 +76,27 @@ void TinyPICO::DotStar_Show(void)
     {
         isInit = true;
         swspi_init();
-        delay(200);
+        delay(10);
     }
-    uint8_t i;            // -> LED data
-    uint16_t n   = 1;     // Counter
+    
     uint16_t b16 = (uint16_t)brightness; // Type-convert for fixed-point math
 
-    for(i=0; i<4; i++) swspi_out(0);    // Start-frame marker
-    if(brightness)
-    {                     // Scale pixel brightness on output
-        do
-        {                               // For each pixel...
-            swspi_out(0xFF);                //  Pixel start
-            for(i=0; i<3; i++) swspi_out((pixel[i] * b16) >> 8); // Scale, write
-        } while(--n);
-    }
-    else
-    {                             // Full brightness (no scaling)
-        do
-        {                               // For each pixel...
-            swspi_out(0xFF);                //  Pixel start
-            for(i=0; i<3; i++) swspi_out(pixel[i]); // R,G,B
-        } while(--n);
-    }
-    for(i=0; i<1; i++) swspi_out(0xFF); // End-frame marker (see note above)
+    // Start-frame marker
+    for( int i=0; i<4; i++) swspi_out(0x00);    
+    
+    // Pixel start
+    swspi_out(0xFF);     
+    
+    for( int i=0; i<3; i++)
+    {
+        if( brightness > 0)
+            swspi_out((pixel[i] * b16) >> 8); // Scale, write - Scaling pixel brightness on output
+        else
+            swspi_out(pixel[i]); // R,G,B @Full brightness (no scaling) 
+    }             
+
+    // // End frame marker
+    swspi_out(0xFF);  
 }
 
 
@@ -109,6 +111,7 @@ void TinyPICO::swspi_out(uint8_t n)
         digitalWrite(DOTSTAR_CLK, HIGH);
         digitalWrite(DOTSTAR_CLK, LOW);
     }
+    delay(1);
 }
 
 void TinyPICO::DotStar_Clear() { // Write 0s (off) to full pixel buffer
