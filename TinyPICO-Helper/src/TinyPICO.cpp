@@ -1,9 +1,14 @@
 // ---------------------------------------------------------------------------
+// TinyPICO Helper Library - v1.4 - 18/10/2019
+//
 // Created by Seon Rozenblum - seon@unexpectedmaker.com
 // Copyright 2019 License: MIT https://github.com/tinypico/tinypico-arduino/blob/master/LICENSE
 //
 // See "TinyPICO.h" for purpose, syntax, version history, links, and more.
 //
+// v1.4 - Support for esp32 calibrated battery voltage conversion ( @joey232 )
+//      - Removed temperature senser functions - This has been depreciated by Espressif
+//      - See https://github.com/espressif/esp-idf/issues/146
 // v1.3 - Code cleanup for SWSPI bit-banging and fixed single set color not working the first time
 // v1.2 - Fixed incorrect attenuation calc in the battery voltage method
 // v1.1 - Fixed folder structure to be compliant with the Arduino Library Manager requirements
@@ -231,16 +236,19 @@ float TinyPICO::GetBatteryVoltage()
     return ( lastMeasuredVoltage );
 }
 
-uint8_t TinyPICO::Get_Internal_Temp_F()
-{
-    return( temprature_sens_read() );
-}
+// Internal Temp Sensor
+// This has been removed from Silicon and future IDF API
+// See this for more information: https://github.com/espressif/esp-idf/issues/146
+// uint8_t TinyPICO::Get_Internal_Temp_F()
+// {
+//     return( temprature_sens_read() );
+// }
 
-float TinyPICO::Get_Internal_Temp_C()
-{
-    float temp_farenheit = temprature_sens_read();
-    return( ( temp_farenheit - 32 ) / 1.8 );
-}
+// float TinyPICO::Get_Internal_Temp_C()
+// {
+//     float temp_farenheit = temprature_sens_read();
+//     return( ( temp_farenheit - 32 ) / 1.8 );
+// }
 
 // Tone - Sound wrapper
 void TinyPICO::Tone( uint8_t pin, uint32_t freq )

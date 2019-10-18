@@ -1,13 +1,13 @@
 // ---------------------------------------------------------------------------
-// TinyPICO Helper Library - v1.0.0 - 24/04/2019
+// TinyPICO Helper Library - v1.4 - 18/10/2019
 //
 // AUTHOR/LICENSE:
 // Created by Seon Rozenblum - seon@unexpectedmaker.com
 // Copyright 2016 License: GNU GPL v3 http://www.gnu.org/licenses/gpl-3.0.html
 //
 // LINKS:
-// Project home: XXX <--
-// Blog: XXX <--
+// Project home: http://tinypico.com
+// Blog: http://tinypico.com
 //
 // DISCLAIMER:
 // This software is furnished "as is", without technical support, and with no 
@@ -20,7 +20,13 @@
 // HISTORY:
 
 //
-// 24/04/2019 v1.0 - Initial release.
+// v1.4 - Support for esp32 calibrated battery voltage conversion ( @joey232 )
+//      - Removed temperature senser functions - This has been depreciated by Espressif
+//      - See https://github.com/espressif/esp-idf/issues/146
+// v1.3 - Code cleanup for SWSPI bit-banging and fixed single set color not working the first time
+// v1.2 - Fixed incorrect attenuation calc in the battery voltage method
+// v1.1 - Fixed folder structure to be compliant with the Arduino Library Manager requirements
+// v1.0 - Initial Release
 //
 // ---------------------------------------------------------------------------
 
@@ -66,8 +72,10 @@
 			uint32_t Color( uint8_t r, uint8_t g, uint8_t b ); // R,G,B to 32-bit color   
 
 			// Internal Temp Sensor
-			uint8_t Get_Internal_Temp_F();
-			float Get_Internal_Temp_C();
+            // This has been removed from Silicon and future IDF API
+            // See this for more information: https://github.com/espressif/esp-idf/issues/146
+			// uint8_t Get_Internal_Temp_F();
+			// float Get_Internal_Temp_C();
 
             // Tone for making sound on any ESP32 - just using channel 0
             void Tone( uint8_t, uint32_t );
@@ -85,7 +93,7 @@
 			byte colorRotation;
 			unsigned long nextRotation;
 			uint8_t brightness;                             // Global brightness setting  
-			uint8_t pixel[ 3 ];                                 // LED RGB values (3 bytes ea.)  
+			uint8_t pixel[ 3 ];                             // LED RGB values (3 bytes ea.)  
 			bool isInit;
             bool isToneInit;
 	};
