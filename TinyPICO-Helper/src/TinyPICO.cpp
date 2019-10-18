@@ -20,13 +20,6 @@
 #include "driver/adc.h"
 #include "esp_adc_cal.h"
 
-	#ifdef __cplusplus
-			extern "C" {
-	#endif
-			uint8_t temprature_sens_read();
-	#ifdef __cplusplus
-			}
-	#endif
 
 // Battery divider resistor values
 #define UPPER_DIVIDER 442
@@ -235,20 +228,6 @@ float TinyPICO::GetBatteryVoltage()
 
     return ( lastMeasuredVoltage );
 }
-
-// Internal Temp Sensor
-// This has been removed from Silicon and future IDF API
-// See this for more information: https://github.com/espressif/esp-idf/issues/146
-// uint8_t TinyPICO::Get_Internal_Temp_F()
-// {
-//     return( temprature_sens_read() );
-// }
-
-// float TinyPICO::Get_Internal_Temp_C()
-// {
-//     float temp_farenheit = temprature_sens_read();
-//     return( ( temp_farenheit - 32 ) / 1.8 );
-// }
 
 // Tone - Sound wrapper
 void TinyPICO::Tone( uint8_t pin, uint32_t freq )

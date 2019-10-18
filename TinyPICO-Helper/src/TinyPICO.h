@@ -71,12 +71,6 @@
 			void DotStar_CycleColor( unsigned long wait );		
 			uint32_t Color( uint8_t r, uint8_t g, uint8_t b ); // R,G,B to 32-bit color   
 
-			// Internal Temp Sensor
-            // This has been removed from Silicon and future IDF API
-            // See this for more information: https://github.com/espressif/esp-idf/issues/146
-			// uint8_t Get_Internal_Temp_F();
-			// float Get_Internal_Temp_C();
-
             // Tone for making sound on any ESP32 - just using channel 0
             void Tone( uint8_t, uint32_t );
             void NoTone( uint8_t );
