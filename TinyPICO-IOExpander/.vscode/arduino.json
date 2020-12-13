@@ -1,6 +1,0 @@
-{
-    "board": "esp32:esp32:tinypico",
-    "configuration": "UploadSpeed=921600,FlashMode=qio,FlashFreq=80,PSRAM=enabled,DebugLevel=none",
-    "port": "COM3",
-    "sketch": "Examples\\Complete\\Complete.ino"
-}
